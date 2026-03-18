@@ -1,0 +1,79 @@
+name: Sync skill with NiiVue source
+on:
+  workflow_dispatch:
+  schedule:
+    # Run daily at 8:00 AM GMT
+    - cron: '0 8 * * *'
+permissions:
+  contents: write
+jobs:
+  sync-skill:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout skill repo
+        uses: actions/checkout@v5
+
+      - name: Checkout NiiVue source
+        uses: actions/checkout@v5
+        with:
+          repository: niivue/niivue
+          path: niivue-source
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+
+      - name: Install Copilot CLI
+        run: npm install -g @github/copilot
+
+      - name: Sync skill content with NiiVue source
+        env:
+          COPILOT_GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+        run: |
+          copilot -p "
+          You are maintaining a Claude Code skill plugin that documents the NiiVue neuroimaging visualization library API.
+
+          The skill files are in this repo:
+          - skills/niivue/SKILL.md (main skill — overview, core patterns, quick reference)
+          - skills/niivue/api-reference.md (detailed property tables, methods, events, constants)
+          - skills/niivue/examples.md (curated working code examples)
+
+          The NiiVue source code is checked out at ./niivue-source/. The key files to scan are:
+          - niivue-source/src/NVControlBase.ts (all public getters, setters, and methods — this is the API surface)
+          - niivue-source/src/NVConstants.ts (enums: SLICE_TYPE, DRAG_MODE, COLORMAP_TYPE, MULTIPLANAR_TYPE, SHOW_RENDER, and config group defaults)
+          - niivue-source/src/NVEvents.ts (NVEventMap — all event names and detail types)
+          - niivue-source/src/NVTypes.ts (TypeScript interfaces for config groups, options types)
+          - niivue-source/docs/api.md (official API style guide with complete property list and naming conventions)
+          - niivue-source/docs/events.md (official event documentation)
+          - niivue-source/examples/ (HTML and JS example files)
+
+          Your task:
+          1. Read the NiiVue source files listed above to determine the current API surface.
+          2. Read the existing skill files (SKILL.md, api-reference.md, examples.md).
+          3. Compare them and identify any differences:
+             - New properties (getters/setters) added to NVControlBase.ts that are missing from api-reference.md
+             - Removed or renamed properties
+             - New methods or changed method signatures
+             - New events added to NVEventMap
+             - Changed enum values or new enums in NVConstants.ts
+             - Changed default values in the *_DEFAULTS objects
+             - New examples in the examples/ directory worth adding
+          4. If there are differences, update the skill files to match the source. Preserve the existing structure and formatting style. Only change what is needed — do not rewrite files unnecessarily.
+          5. If the API surface has changed, also bump the patch version in .claude-plugin/plugin.json and .claude-plugin/marketplace.json (e.g. 1.0.0 -> 1.0.1).
+          6. If nothing has changed, do not modify any files.
+          " --allow-tool='shell(git:*)' --allow-tool=read --allow-tool=write --allow-tool=edit --no-ask-user
+
+      - name: Check for changes and commit
+        run: |
+          cd $GITHUB_WORKSPACE
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet && git diff --cached --quiet; then
+            echo "No changes detected — skill is up to date."
+          else
+            git add -A
+            git commit -m "chore: sync skill content with NiiVue source
+
+          Automated daily sync via GitHub Copilot CLI.
+          Scanned niivue/niivue for API changes and updated skill files."
+            git push
+          fi

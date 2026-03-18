@@ -1,0 +1,17 @@
+{
+  "name": "niivue-niivue-skill",
+  "owner": {
+    "name": "NiiVue"
+  },
+  "plugins": [
+    {
+      "name": "niivue",
+      "source": {
+        "source": "github",
+        "repo": "niivue/niivue-skill",
+        "ref": "main"
+      },
+      "version": "1.0.0"
+    }
+  ]
+}

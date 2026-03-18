@@ -1,0 +1,12 @@
+{
+  "name": "niivue",
+  "description": "Claude Code skill for building web applications with the NiiVue neuroimaging visualization library",
+  "version": "1.0.0",
+  "author": {
+    "name": "NiiVue"
+  },
+  "homepage": "https://github.com/niivue/niivue-skill",
+  "repository": "https://github.com/niivue/niivue-skill",
+  "license": "MIT",
+  "keywords": ["niivue", "neuroimaging", "webgpu", "medical-imaging", "visualization"]
+}
