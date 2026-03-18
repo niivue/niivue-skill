@@ -22,7 +22,7 @@ The skill triggers automatically when:
 
 ```
 /plugin marketplace add niivue/niivue-skill
-/plugin install niivue@niivue-niivue-skill
+/plugin install niivue@niivue-skill
 ```
 
 ### Local Testing
@@ -39,7 +39,7 @@ Plugin updates are **version-driven**. When we publish a new version:
 
 2. **Manual update** -- Run:
    ```
-   /plugin update niivue@niivue-niivue-skill
+   /plugin update niivue@niivue-skill
    ```
 
 3. **Reload in current session** -- After an update, reload plugins without restarting:
