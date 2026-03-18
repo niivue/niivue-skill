@@ -1,5 +1,7 @@
 # NiiVue Skill for Claude Code
 
+> **Note:** This skill targets the NiiVue 1.0.0 API, which has not been published yet. The skill will not work correctly until NiiVue 1.0.0 is released.
+
 A Claude Code plugin that provides API guidance, patterns, and examples for building web applications with the [NiiVue](https://github.com/niivue) neuroimaging visualization library.
 
 ## What It Does
