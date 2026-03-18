@@ -67,6 +67,10 @@ Supporting reference files:
 - **api-reference.md** -- Complete property tables, methods, events, and constants
 - **examples.md** -- 10 curated working code examples
 
+## Automated Sync
+
+A daily GitHub Actions workflow uses GitHub Copilot to scan the [NiiVue source](https://github.com/niivue/niivue) for API changes and automatically updates the skill files to stay in sync. If the API surface has changed, the workflow bumps the plugin version so users receive the update.
+
 ## Links
 
 - [NiiVueGPU](https://github.com/rordenlab/niivuegpu) -- The visualization library
